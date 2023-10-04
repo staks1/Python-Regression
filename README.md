@@ -19,7 +19,7 @@ The code and models were built using :
 ## Prerequisites
 
 ```
-python						  3.11
+python			      3.11
 pandas                        2.1.1
 numpy                         1.24.1
 matplotlib                    3.8.0
