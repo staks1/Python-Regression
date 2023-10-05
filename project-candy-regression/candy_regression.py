@@ -56,3 +56,73 @@ linear_correlations = all_data.corr(method = 'pearson')
 
 # non-linear 
 non_linear_correlations = all_data.corr(method = 'spearman')
+
+#-------- Generally high POSITIVE correlation -------- #
+# chocolate - bar 
+# chocolate - winpercentile 
+# chocolate - pricepercent 
+# chocolate - peanutalmondy 
+#----------------------------
+# fruity - hard 
+# fruity - pluribus
+#-------------------------
+# caramel - bar 
+# caramel - nougat
+#-----------------------
+# peanutalmondy - winpercent
+#----------------------
+# nougat - bar 
+#---------------------
+# crispedricewafer - hard 
+#--------------------
+# hard - fruity 
+#-------------------
+# bar - chocolate 
+# bar - nougat 
+# bar - pricepercent
+# bar - winpercent 
+#-------------------
+# pluribus - fruity (only)
+#------------------
+# sugarpercent - pricepercent
+#------------------
+# pricepercent - bar 
+# pricepercent - chocolate 
+#---------------------
+# winpercent - chocolate (high)
+# winpercent - bar 
+#--------------------
+
+
+#-------- Generally high NEGATIVE correlation -------- #
+# chocolate - fruity (high)
+# chocolate - hard 
+# chocolate - pluribus 
+#--------------------------
+# fruity - chocolate 
+# fruity - pricepercent
+# fruity - winpercent 
+# fruity - peanutyalmond
+# fruity - caramel 
+#-------------------------
+# peanutyalmond - fruity 
+#------------------------
+# nougat - pluribus 
+#------------------------
+# crispedricewafer - fruity 
+#-----------------------
+# hard - chocolate 
+# hard - winpercent 
+#----------------------
+# bar - fruity 
+# bar - pluribus 
+#----------------------
+# sugarpercent - none 
+#----------------------
+# pricepercent - fruity 
+# pricepercent - hard 
+# pricepercent - pluribus 
+#---------------------
+# winpercent - fruity 
+# winpercent - hard 
+#---------------------
