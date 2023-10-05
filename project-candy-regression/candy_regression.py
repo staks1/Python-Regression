@@ -175,7 +175,7 @@ sns.stripplot(x='chocolate',y= 'winpercent',ax=axes[0],data=choc_win)
 # we can also create the violin plots to better study the relationships between the 2 features 
 # this way we can observe how the observations are scattered along the winpercent values 
 # we of course see the same pattern with more obervations being in the 35%-45% for the no chocolate
-# more obervations being in the 50%-75% for the chocolate class 
+# more obervations being in the 45%/50%-75% for the chocolate class 
 axes[1].set(title='Chocolate violinplot')
 sns.set_style('whitegrid')
 sns.violinplot(x='chocolate',y= 'winpercent',ax=axes[1],data=choc_win)
