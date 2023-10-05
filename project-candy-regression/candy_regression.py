@@ -58,71 +58,125 @@ linear_correlations = all_data.corr(method = 'pearson')
 non_linear_correlations = all_data.corr(method = 'spearman')
 
 #-------- Generally high POSITIVE correlation -------- #
-# chocolate - bar 
-# chocolate - winpercentile 
-# chocolate - pricepercent 
+# chocolate - winpercentile  (very high)
+# chocolate - bar  (very high)
+# chocolate - pricepercent  (high)
 # chocolate - peanutalmondy 
 #----------------------------
-# fruity - hard 
-# fruity - pluribus
+# fruity - hard  ( very high)
+# fruity - pluribus (high)
 #-------------------------
 # caramel - bar 
 # caramel - nougat
 #-----------------------
-# peanutalmondy - winpercent
+# peanutalmondy - winpercent (high)
+# peanutalmondy - chocolate (high)
 #----------------------
-# nougat - bar 
+# nougat - bar (very high)
 #---------------------
-# crispedricewafer - hard 
+# crispedricewafer - bar (high) (?)
 #--------------------
-# hard - fruity 
+# hard - fruity  (very high) (?) 
 #-------------------
-# bar - chocolate 
-# bar - nougat 
-# bar - pricepercent
-# bar - winpercent 
+# bar - chocolate (very high)
+# bar - nougat  (very high)
+# bar - pricepercent (high) (?)
+# bar - winpercent  (high)  (?)
 #-------------------
-# pluribus - fruity (only)
+# pluribus - fruity (only) (high) (?)
 #------------------
-# sugarpercent - pricepercent
+# sugarpercent - pricepercent (?)
 #------------------
-# pricepercent - bar 
-# pricepercent - chocolate 
+# pricepercent - bar  (very high)
+# pricepercent - chocolate  (very high)
 #---------------------
-# winpercent - chocolate (high)
-# winpercent - bar 
+# winpercent - chocolate (very high)
+# winpercent - bar  (high)
 #--------------------
 
 
 #-------- Generally high NEGATIVE correlation -------- #
-# chocolate - fruity (high)
+# chocolate - fruity (very high)
 # chocolate - hard 
 # chocolate - pluribus 
 #--------------------------
-# fruity - chocolate 
+# fruity - chocolate (very high)
+# fruity - bar (very high)
 # fruity - pricepercent
 # fruity - winpercent 
 # fruity - peanutyalmond
 # fruity - caramel 
 #-------------------------
-# peanutyalmond - fruity 
+# caramel - fruity  (?)
 #------------------------
-# nougat - pluribus 
+# peanutyalmond - fruity (?) 
 #------------------------
-# crispedricewafer - fruity 
+# nougat - pluribus (?)
+#------------------------
+# crispedricewafer - fruity (?)
 #-----------------------
-# hard - chocolate 
+# hard - chocolate  (high) (?)
 # hard - winpercent 
 #----------------------
-# bar - fruity 
-# bar - pluribus 
+# bar - pluribus  (very high)
+# bar - fruity  (very high)
 #----------------------
-# sugarpercent - none 
+# pluribus -  bar (very high)
 #----------------------
-# pricepercent - fruity 
+# sugarpercent - fruity (?) , needs further analysis 
+#----------------------
+# pricepercent - fruity  (high)
 # pricepercent - hard 
 # pricepercent - pluribus 
 #---------------------
-# winpercent - fruity 
-# winpercent - hard 
+# winpercent - fruity (high) (?)
+# winpercent - hard  (high)  (?)
 #---------------------
+
+
+# Now we are going to take the most POSITIVELY /  NEGATIVELY correlated features and further study their distributions 
+
+
+
+# define the different pairs we are going to analyze 
+choc_win = all_data.loc[:,['chocolate','winpercent']]
+choc_bar = all_data.loc[:,['chocolate','bar']]
+
+# we need to count all the possible winpercentiles for chocolate=1 (class 0) and for chocolate=0 (class 1)
+plt.figure()
+choc_win.hist()
+
+# from the 2 simple histograms we can see that we have more samples without chocolate than with chocolate 
+# also from the histogram of the winpercent we get that most of the data are within the 40%-50% percentile 
+
+# This is not very helpful 
+# what we need to do is calculate from each class (chocolate or no chocolate)
+# what percentiles each one has 
+
+chocolate_on = choc_win[choc_win['chocolate']==1]
+chocolate_off = choc_win[choc_win['chocolate']==0]
+
+
+# create plots for both chocolate and non chocolate 
+
+# we can see  below  that the winpercent observations for the chocolate products
+# indicate that a higher percentile of winpercent corresponds to chocolate products
+# 50% of observations on chocolate products are between 50%-71% winpercent 
+# 50% of observations on no chocolate products are between 35%-48%
+# this indicates that chocolate products seem to lead to higher winpercentages 
+figure, axes = plt.subplots(1,2)
+axes[0].set(title='Chocolate boxplot')
+sns.set_style('whitegrid')
+sns.boxplot(x='chocolate',y= 'winpercent',ax=axes[0],data=choc_win)
+sns.stripplot(x='chocolate',y= 'winpercent',ax=axes[0],data=choc_win)
+
+
+
+# we can also create the violin plots to better study the relationships between the 2 features 
+# this way we can observe how the observations are scattered along the winpercent values 
+# we of course see the same pattern with more obervations being in the 35%-45% for the no chocolate
+# more obervations being in the 50%-75% for the chocolate class 
+axes[1].set(title='Chocolate violinplot')
+sns.set_style('whitegrid')
+sns.violinplot(x='chocolate',y= 'winpercent',ax=axes[1],data=choc_win)
+sns.stripplot(x='chocolate',y= 'winpercent',ax=axes[1],data=choc_win)
