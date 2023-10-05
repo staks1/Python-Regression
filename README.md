@@ -8,11 +8,11 @@ This project includes practice Regression [and more] Problems in Python.
 
 ## Built With
 
-The code and models were built using :
-* python
-* sklearn
+The code and models were built using python and utilising the following libraries:
 * pandas 
 * numpy
+* PyTorch
+* sklearn
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
