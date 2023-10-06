@@ -20,9 +20,6 @@ print(data.head())
 print(list(data.columns))
 
 
-# keep corresponding competitor names and row numbers 
-
-
 # print statistical information about each column 
 print(data.describe())
 
@@ -32,23 +29,6 @@ categorical_data = data[['chocolate','fruity','caramel','peanutyalmondy','nougat
 continuous_data = data[['sugarpercent','pricepercent','winpercent']]
 
 
-
-# we will now study the distribution of the data 
-plt.figure()
-sns.pairplot(data = continuous_data,diag_kind='kde')
-
-# we can see that the continuous features seem to follow a distribution 
-# close to Gauss
-
-plt.figure()
-vp = sns.violinplot(data = categorical_data)
-vp.set_xticklabels(vp.get_xticklabels(), rotation=90)
-
-# compute correlation of columns (we will exclude the competitornames)
-# we put all the columns together (predictors)
-
-# from a quick correlation analysis
-# we can make some potential observations about the relationship between the different features 
 
 # linear 
 all_data = data.iloc[:,1:]
@@ -134,49 +114,135 @@ non_linear_correlations = all_data.corr(method = 'spearman')
 #---------------------
 
 
-# Now we are going to take the most POSITIVELY /  NEGATIVELY correlated features and further study their distributions 
+
+# now we will plot the distributions of all our features to see if we have pairs of features with similar
+# distributions , this could mean they are correlated 
+def plotDist(data):
+    for i,c in enumerate(data.columns):
+        plt.figure(i)
+        plt.title(c)
+        data[c].hist()
+        plt.show()
+        
+# we can't really reach any conclusions this way
+#plotDist(all_data)
+
+
+# function for violinplots and boxplots 
+def plotPairs(data,title,feature1,feature2):
+    figure, axes = plt.subplots(1,2)
+    axes[0].set(title=title)
+    sns.set_style('whitegrid')
+    sns.boxplot(x=feature1,y=feature2,ax=axes[0],data=data[[feature1,feature2]])
+    sns.stripplot(x=feature1,y=feature2,ax=axes[0],data=data[[feature1,feature2]])
+    axes[1].set(title=title)
+    sns.set_style('whitegrid')
+    sns.violinplot(x=feature1,y=feature2,ax=axes[1],data=data[[feature1,feature2]])
+    sns.stripplot(x=feature1,y=feature2,ax=axes[1],data=data[[feature1,feature2]])
+
+
+# function for scatter plot
+def scatterPairs(data,title,feature1,feature2):
+    figure, axes = plt.subplots(1,2)
+    axes[0].set(title=title)
+    sns.set_style('whitegrid')
+    sns.scatterplot(x=feature1,y=feature2,ax=axes[0],data=data[[feature1,feature2]])
+    #sns.stripplot(x=feature1,y=feature2,ax=axes[0],data=data[[feature1,feature2]])
+    
+
+
+# plotting pairs of features 
+# we observe that for non chocolate we see pretty much only non bar (except outliers)
+# for chocolate we observe bar and no bar observations 
+# non chocolate could mean no bar (discriminating feature)
+# bars exist only alongside chocolate 
+plotPairs(all_data, 'chocolate_bar', 'chocolate', 'bar')
 
 
 
-# define the different pairs we are going to analyze 
-choc_win = all_data.loc[:,['chocolate','winpercent']]
-choc_bar = all_data.loc[:,['chocolate','bar']]
-
-# we need to count all the possible winpercentiles for chocolate=1 (class 0) and for chocolate=0 (class 1)
-plt.figure()
-choc_win.hist()
-
-# from the 2 simple histograms we can see that we have more samples without chocolate than with chocolate 
-# also from the histogram of the winpercent we get that most of the data are within the 40%-50% percentile 
-
-# This is not very helpful 
-# what we need to do is calculate from each class (chocolate or no chocolate)
-# what percentiles each one has 
-
-chocolate_on = choc_win[choc_win['chocolate']==1]
-chocolate_off = choc_win[choc_win['chocolate']==0]
-
-
-# create plots for both chocolate and non chocolate 
 
 # we can see  below  that the winpercent observations for the chocolate products
 # indicate that a higher percentile of winpercent corresponds to chocolate products
 # 50% of observations on chocolate products are between 50%-71% winpercent 
 # 50% of observations on no chocolate products are between 35%-48%
 # this indicates that chocolate products seem to lead to higher winpercentages 
-figure, axes = plt.subplots(1,2)
-axes[0].set(title='Chocolate boxplot')
-sns.set_style('whitegrid')
-sns.boxplot(x='chocolate',y= 'winpercent',ax=axes[0],data=choc_win)
-sns.stripplot(x='chocolate',y= 'winpercent',ax=axes[0],data=choc_win)
-
-
-
 # we can also create the violin plots to better study the relationships between the 2 features 
 # this way we can observe how the observations are scattered along the winpercent values 
 # we of course see the same pattern with more obervations being in the 35%-45% for the no chocolate
 # more obervations being in the 45%/50%-75% for the chocolate class 
-axes[1].set(title='Chocolate violinplot')
-sns.set_style('whitegrid')
-sns.violinplot(x='chocolate',y= 'winpercent',ax=axes[1],data=choc_win)
-sns.stripplot(x='chocolate',y= 'winpercent',ax=axes[1],data=choc_win)
+plotPairs(all_data, 'chocolate_winpercent', 'chocolate', 'winpercent')
+
+
+
+# we also see that chocolate is correlated with higher pricercentiles than non chocolate products  
+# chocolate --> 0.5 - 0.85 , non chocolate -->0.15 - 0.45 
+# so higher pricepercentiles as well as high winpercentiles could be predictors of chocolate products 
+plotPairs(all_data,'chocolate-pricepercent','chocolate','pricepercent')
+
+
+
+# we don't see non fruity hard , for all the non fruity we have non hard 
+# for fruity we have hard as well as non hard 
+# again hard could discriminate non fruity could mean non hard 
+# also chocolate observations tend to be non hard since most chocolate observations 
+# are clustered on the low 0 quartile
+plotPairs(all_data, 'fruity - hard', 'fruity', 'hard')
+
+
+# all fruity we have are non bars 
+# non fruity could be bars and non bars 
+# this gives as another reason to use bar as a predictor
+# no bar tend to discriminate between fruity and all other kinds 
+plotPairs(all_data, 'fruity - bar', 'fruity', 'bar')
+
+
+# peanuts tend to be correlated with higher winpercents 
+# but we can't probably draw a clear conclution
+plotPairs(all_data, 'peanutyalmondy-winpercent', 'peanutyalmondy', 'winpercent')
+
+
+# this is also an nteresting observation
+# peanuts tend to coexist with chocolate products 
+# with no chocolate we see no peanuts 
+# so when peanuts exist they exist along chocolate 
+plotPairs(all_data, 'chocolate-peanutyalmondy', 'chocolate', 'peanutyalmondy')
+
+
+
+# nougat seems to exist only alongside bars  
+# and bars exist only alongside chocolate (from before)
+# so nougat must exist only alongside chocolate (when it exists)
+# indeed we see that with no chocolate we get no nougat
+# but with chocolate we can have or not have nougat 
+plotPairs(all_data, 'nougat-bar', 'nougat', 'bar')
+plotPairs(all_data, 'chocolate-nougat', 'chocolate','nougat')
+
+
+# let's plot bars 
+# bars tend to mean higher pricepercentiles and higher winpercentiles
+# also bar-winpercent , chocolate-winpercent have similar distributions 
+# as we see from the plots 
+plotPairs(all_data, 'bar-winpercent', 'bar', 'winpercent')
+plotPairs(all_data, 'bar-pricepercent', 'bar','pricepercent')
+
+
+# let's see if sugar plays any role 
+# no clear image about the relationship
+# between plural units in a package and fruity
+# chocolate tends to be in single packages and not plural units 
+# and the opposite seems to happen for the non chocolate products 
+# I would not say we draw any conclusions from those relationships
+plotPairs(all_data, 'pluribus-fruity', 'pluribus', 'fruity')
+plotPairs(all_data, 'chocolate-pluribus', 'chocolate', 'pluribus')
+
+
+
+# let's study the sugarpercent w.r.t chocolate , winpercent , pricepercent 
+# hmm . chocolate seems to mean a certain 0.35-0.6 percentile of sugar 
+# whereas the non chocolate products are more spread w.r.t sugar
+plotPairs(all_data, 'chocolate-sugarpercent', 'chocolate', 'sugarpercent')
+
+
+# we need a scatter plot for the relationshop between winpercent and sugarpercent
+# we don't see any striking observation so we can't use the 
+scatterPairs(all_data, 'winpercent-sugarpercent', 'winpercent','sugarpercent')
