@@ -409,10 +409,8 @@ y_pred = linear_reg.predict(x_test)
 # now let's calculate mean squared error  bewtween the y_pred and y_true 
 score = mean_squared_error(y_test,y_pred)
 
-
-# we can plot the original training set and then plot the model prediction 
-# and then do the same for the test set 
-plt.figure()
-plt.title("REGRESSION ON TRAINING SET ")
-plt.scatter(x_train.reshape(1,-1), y_train.reshape(1,-1), color="green")
-plt.scatter(x_train.reshape(1,-1),y_train_pred.reshape(1,-1),color="red")
+# TODO : 
+# in order to be sure of possible multicolinearities 
+# we should plot all (scatter) pairs of all variables-predictors before 
+# doing feature selection 
+# also should plot the regression hyperplane for tuples-triplets of variables in order to observe the predicted model results
