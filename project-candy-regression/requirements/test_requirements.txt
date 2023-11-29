@@ -1,0 +1,10 @@
+# inherit requirements.txt 
+-r requirements.txt
+
+# additional test requirements 
+pytest>=6.2.3,<6.3.0
+
+# linting and formatting
+black==20.8b1
+flake8>=3.9.0,<3.10.0
+#mypy==0.812
