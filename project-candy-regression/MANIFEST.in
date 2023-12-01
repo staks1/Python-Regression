@@ -1,0 +1,8 @@
+include *.pkl
+recursive-include ./classification_model/*
+recursive-exclude ./mlp/*
+exclude mlp 
+recursive-exclude ./Jupyter-Notebooks/*
+exclude ./Jupyter-Notebooks
+exclude ./candy_regression.py
+exclude ./.gitignore

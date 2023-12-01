@@ -1,0 +1,76 @@
+# package information 
+package_name : classification_model
+
+# Data 
+training_data_file : candy-data.csv
+x_test_data_file : infer-testx.csv
+y_test_data_file : infer-testy.csv
+
+# variables to predict 
+target : chocolate
+
+pipeline_name : classification_model
+pipeline_save_file : classification_model_output_v
+
+
+## --- Set training/testing parameters --- ##
+
+# test size
+test_size : 0.2
+# set seed 
+random_state : 0
+alpha : 0.01
+
+# set C parameter for svc model (feature selection and model)
+c : 0.04 
+
+
+# discreet features 
+discreet_vars :
+  -fruity
+  -caramel
+  -peanutyalmondy
+  -nougat
+  -crispedricewafer
+  -hard
+  -bar
+  -pluribus
+
+
+discreet_na :
+  -fruity
+  -caramel
+  -peanutyalmondy
+  -nougat
+  -crispedricewafer
+  -hard
+  -bar
+  -pluribus
+
+
+# continuous variables
+cont_vars :
+  -sugarpercent
+  -pricepercent 
+  -winpercent
+
+continuous_na :
+  -garpercent
+  -pricepercent 
+  -winpercent
+
+
+# choose features for the pipeline (we will feed all of them into the pipeline and the pipeline will output only the useful ones)
+features :
+  -sugarpercent
+  -pricepercent
+  -winpercent
+  -fruity
+  -caramel
+  -peanutyalmondy
+  -nougat
+  -crispedricewafer
+  -hard
+  -bar
+  -pluribus
+
