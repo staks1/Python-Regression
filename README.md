@@ -4,7 +4,11 @@
 
 ## About the Project
 This project includes practice Regression [and more] Problems in Python.
-It will also feature a branch for building, packaging the model and preparing it for deployment into an app
+It will also feature a branch for building, packaging the model and preparing it for deployment into an app.
+
+The structure follows 2 branches :
+1. main (research branch)
+2. production ( testing, packaging, gettign the model ready for deployment)
 
 
 ## Built With
